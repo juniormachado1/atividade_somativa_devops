@@ -1,0 +1,29 @@
+name: Publish to Docker Hub
+
+# Desafio opcional da semana 4: publica a imagem no Docker Hub a cada push na main.
+# Requer os secrets DOCKERHUB_USERNAME e DOCKERHUB_TOKEN configurados no repositório
+# (Settings > Secrets and variables > Actions). Sem eles, este workflow falha propositalmente
+# na etapa de login — os workflows de CI/CD acima não dependem dele.
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  push-to-dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/flask-cicd-docker:latest
