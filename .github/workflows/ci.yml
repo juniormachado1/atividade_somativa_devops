@@ -22,3 +22,10 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"🚨 CI falhou em **${{ github.repository }}** (branch \`${{ github.ref_name }}\`, commit \`${{ github.sha }}\`) por ${{ github.actor }}.\nDetalhes: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "${{ secrets.DISCORD_WEBHOOK_URL }}"
