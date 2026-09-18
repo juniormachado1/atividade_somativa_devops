@@ -33,3 +33,9 @@ def test_not_found_route(client):
 def test_method_not_allowed(client):
     response = client.post("/")
     assert response.status_code == 405
+
+
+def test_temporary_failure_to_demo_discord_alert(client):
+    # Falha proposital: usada só para comprovar que o alerta do Discord dispara no CI.
+    # Removida no commit seguinte, antes do merge.
+    assert False
